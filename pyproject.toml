@@ -1,0 +1,13 @@
+[project]
+name = "music-league-scripts"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "aiohttp>=3.13.3",
+    "aiohttp-socks>=0.11.0",
+    "bs4>=0.0.2",
+    "lxml>=6.0.2",
+    "stem>=1.8.2",
+]
