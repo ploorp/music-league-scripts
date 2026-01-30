@@ -35,5 +35,5 @@ def main():
     
     print(f"Output saved to {output_filename}")
 
-if __name__ == '__main__':
-    main()
+
+main()
