@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from tor_utils_async import get_via_tor, init_tor_sessions, close_tor_sessions
 
 # The base url of the intellectual mirror (make sure it ends with "/")
-base_url = "https://intellectual.ducks.party"
+base_url = "int.dc09.xyz/"
 similarity_threshold = 80
 unique_words_threshold = 15
 
