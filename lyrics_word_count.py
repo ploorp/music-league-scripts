@@ -2,7 +2,7 @@ import asyncio
 from bs4 import BeautifulSoup
 from tor_utils_async import get_via_tor, init_tor_sessions, close_tor_sessions
 
-lyric_class = "css-146c3p1 r-1inkyih r-11rrj2j r-fdjqy7 r-1dxmaum r-1it3c9n r-135wba7 r-z2wwpe r-15zivkp"
+lyric_class = "song-lyric"
 
 async def fetch_page(url: str) -> BeautifulSoup:
     print(f"Fetching {url}")
@@ -10,9 +10,9 @@ async def fetch_page(url: str) -> BeautifulSoup:
     return BeautifulSoup(response, "lxml")
 
 async def get_lyrics_from_url(url: str):
-    response = await fetch_page("https://www.musixmatch.com/lyrics/100-gecs-Laura-Les-Dylan-Brady/hand-crushed-by-a-mallet")
+    response = await fetch_page(url)
 
-    lyrics = response.find_all(class_=lyric_class)
+    lyrics = response.find_all("p", class_=lyric_class)
     print(f"Found {len(lyrics)} lines")
     
     result = "\n".join(lyric.get_text() for lyric in lyrics)
@@ -24,12 +24,9 @@ async def main():
     await init_tor_sessions()
     
 
-    lyrics = await get_lyrics_from_url("https://www.musixmatch.com/lyrics/100-gecs-Laura-Les-Dylan-Brady/hand-crushed-by-a-mallet")
+    lyrics = await get_lyrics_from_url("https://in2.bloat.cat/100-gecs-money-machine-lyrics?id=4589240")
 
     print(lyrics)
-    #print(response.get_text())
-
-    #print(response)
 
     await close_tor_sessions()
 
