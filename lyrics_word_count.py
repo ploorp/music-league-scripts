@@ -6,6 +6,7 @@ from urllib.parse import quote
 from bs4 import BeautifulSoup
 from tor_utils_async import get_via_tor, init_tor_sessions, close_tor_sessions
 
+# The base url of the intellectual mirror (make sure it ends with "/")
 base_url = "https://intellectual.ducks.party"
 similarity_threshold = 80
 unique_words_threshold = 15
@@ -41,7 +42,7 @@ async def get_lyrics_from_lyrics_dict(lyrics_dict: dict[str, dict[str, str]]):
 
 async def search_for_song(artist: str, title: str, key: str):
     query = f"{artist} - {title}"
-    url = f"{base_url}/search?q={quote(query)}"
+    url = f"{base_url}search?q={quote(query)}"
     soup = await fetch_page(url)
     
     results = soup.find_all("a", class_="song")
@@ -57,7 +58,7 @@ async def search_for_song(artist: str, title: str, key: str):
         similarity = fuzz.ratio(found_title, title)
         if similarity >= similarity_threshold:
             print(f"{found_artist} - {found_title} is {similarity} similar to {artist} - {title}")
-            song_url = f"{base_url}{result['href']}"
+            song_url = f"{base_url}{result['href'][1:]}"
             return key, song_url
     return None
 
