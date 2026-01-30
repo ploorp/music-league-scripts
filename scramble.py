@@ -2,14 +2,15 @@ import csv
 
 def count_letters(text):
     target_letters = {'c', 'o', 'r', 'n', 'i', 's', 'h'}
-    count = 0
+    found_letters = set()
     for char in text.lower():
         if char in target_letters:
-            count += 1
-    return count
+            found_letters.add(char)
+    return len(found_letters)
 
 def main():
-    filename = 'jan_26.csv'
+    filename = input("enter csv filename to check: ")
+    sort_length = True # sort by title length (otherwise alphabetically)
     output_filename = filename.replace('.csv', '.txt')
     matches = []
     
@@ -21,7 +22,10 @@ def main():
             if count_letters(track_name) >= 6:
                 matches.append((track_name, artist_name))
     
-    unique_matches = sorted(list(set(matches)), key=lambda x: x[0])
+    if sort_length:
+        unique_matches = sorted(list(set(matches)), key=lambda x: len(x[0]))
+    else:
+        unique_matches = sorted(list(set(matches)), key=lambda x: x[0].lower())
 
     with open(output_filename, 'w', encoding='utf-8') as outfile:
         for song, artist in unique_matches:
