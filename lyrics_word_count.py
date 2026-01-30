@@ -8,4 +8,4 @@ def unique_words(text):
 def main():
     lyrics = input("enter lyrics in genius format: ")
     words = unique_words(lyrics)
-    print(f"wc: {len(words)}")
+    print(f"unique wc: {len(words)}")
