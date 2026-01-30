@@ -10,6 +10,7 @@ dependencies = [
     "brotli>=1.2.0",
     "bs4>=0.0.2",
     "lxml>=6.0.2",
-    "requests>=2.32.5",
+    "pandas>=3.0.0",
     "stem>=1.8.2",
+    "thefuzz>=0.22.1",
 ]
