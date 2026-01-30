@@ -6,11 +6,6 @@ def unique_words(text):
     return set(text.split())
 
 def main():
-    lyrics = """
-
-
-
-"""
-
+    lyrics = input("enter lyrics in genius format: ")
     words = unique_words(lyrics)
     print(f"wc: {len(words)}")
