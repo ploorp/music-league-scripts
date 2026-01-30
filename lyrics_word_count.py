@@ -6,19 +6,26 @@ from urllib.parse import quote
 from bs4 import BeautifulSoup
 from tor_utils_async import get_via_tor, init_tor_sessions, close_tor_sessions
 
-lyric_class = "song-lyric"
+base_url = "https://intellectual.ducks.party"
 similarity_threshold = 80
 unique_words_threshold = 15
+
 
 async def fetch_page(url: str) -> BeautifulSoup:
     print(f"Fetching {url}")
     response = await get_via_tor(url)
     return BeautifulSoup(response, "lxml")
 
+
+async def get_lyrics_from_az_url(url):
+    response = await fetch_page(url)
+    print(response.get_text())
+
+
 async def get_lyrics_from_url(url: str, key: str):
     soup = await fetch_page(url)
 
-    lyrics = soup.find_all("p", class_=lyric_class)
+    lyrics = soup.find_all("p", class_="song-lyric")
     if not lyrics:
         print(f"No lyrics found for {key} ({url}), skipping.")
         return None
@@ -34,7 +41,7 @@ async def get_lyrics_from_lyrics_dict(lyrics_dict: dict[str, dict[str, str]]):
 
 async def search_for_song(artist: str, title: str, key: str):
     query = f"{artist} - {title}"
-    url = f"https://in2.bloat.cat/search?q={quote(query)}"
+    url = f"{base_url}/search?q={quote(query)}"
     soup = await fetch_page(url)
     
     results = soup.find_all("a", class_="song")
@@ -50,7 +57,7 @@ async def search_for_song(artist: str, title: str, key: str):
         similarity = fuzz.ratio(found_title, title)
         if similarity >= similarity_threshold:
             print(f"{found_artist} - {found_title} is {similarity} similar to {artist} - {title}")
-            song_url = f"https://in2.bloat.cat{result['href']}"
+            song_url = f"{base_url}{result['href']}"
             return key, song_url
     return None
 
@@ -152,6 +159,8 @@ async def main():
     with open("unique_words.txt", "w") as f:
         for key, value in sorted_unique_words.items():
             f.write(f"{key} ({value['unique_words_count']})\n")
+
+    # await get_lyrics_from_az_url("https://www.azlyrics.com/lyrics/100gecs/moneymachine.html")
 
     await close_tor_sessions()
 
