@@ -19,8 +19,10 @@ async def fetch_page(url: str) -> BeautifulSoup:
 
 
 async def get_lyrics_from_az_url(url):
-    response = await fetch_page(url)
-    print(response.get_text())
+    soup = await fetch_page(url)
+    row = soup.find("div", class_="row")
+    lyrics = row.find("div")
+    print(lyrics.get_text())
 
 
 async def get_lyrics_from_url(url: str, key: str):
@@ -143,25 +145,25 @@ async def main():
     
     df = load_song_info("songs.csv")
 
-    lyrics_dict = await scrape_lyrics_from_df(df)
-    await fill_in_unique_words(lyrics_dict)
-    with open("all_lyrics.json", "w") as f:
-        json.dump(lyrics_dict, f, indent=4)
+    # lyrics_dict = await scrape_lyrics_from_df(df)
+    # await fill_in_unique_words(lyrics_dict)
+    # with open("all_lyrics.json", "w") as f:
+    #     json.dump(lyrics_dict, f, indent=4)
 
-    unique_words_dict = filter_lyrics_by_unique_words(lyrics_dict)
-    sorted_unique_words = dict(
-        sorted(
-            unique_words_dict.items(),
-            key=lambda item: item[1].get("unique_words_count", 0),
-        )
-    )
-    with open("unique_words.json", "w") as f:
-        json.dump(sorted_unique_words, f, indent=4)
-    with open("unique_words.txt", "w") as f:
-        for key, value in sorted_unique_words.items():
-            f.write(f"{key} ({value['unique_words_count']})\n")
+    # unique_words_dict = filter_lyrics_by_unique_words(lyrics_dict)
+    # sorted_unique_words = dict(
+    #     sorted(
+    #         unique_words_dict.items(),
+    #         key=lambda item: item[1].get("unique_words_count", 0),
+    #     )
+    # )
+    # with open("unique_words.json", "w") as f:
+    #     json.dump(sorted_unique_words, f, indent=4)
+    # with open("unique_words.txt", "w") as f:
+    #     for key, value in sorted_unique_words.items():
+    #         f.write(f"{key} ({value['unique_words_count']})\n")
 
-    # await get_lyrics_from_az_url("https://www.azlyrics.com/lyrics/100gecs/moneymachine.html")
+    await get_lyrics_from_az_url("https://www.azlyrics.com/lyrics/100gecs/moneymachine.html")
 
     await close_tor_sessions()
 
