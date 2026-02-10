@@ -1,6 +1,8 @@
 *.csv
 *.txt
 .venv
+*.zip
+csvs/
 
 all_lyrics.json
 unique_words.json
